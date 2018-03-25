@@ -40,7 +40,7 @@ namespace RunMun
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager)
         {
             if (env.IsDevelopment())
             {
@@ -56,6 +56,11 @@ namespace RunMun
             app.UseStaticFiles();
 
             app.UseAuthentication();
+
+            Console.WriteLine("seeding");
+            IdentityDataInitializer.SeedData(userManager, roleManager);
+            IdentityDataInitializer.SeedRoles(roleManager);
+            IdentityDataInitializer.SeedUsers(userManager);
 
             app.UseMvc(routes =>
             {

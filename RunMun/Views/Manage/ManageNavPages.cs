@@ -11,6 +11,8 @@ namespace RunMun.Views.Manage
     {
         public static string ActivePageKey => "ActivePage";
 
+        public static string Profile => "Profile";
+
         public static string Index => "Index";
 
         public static string ChangePassword => "ChangePassword";
@@ -19,7 +21,11 @@ namespace RunMun.Views.Manage
 
         public static string TwoFactorAuthentication => "TwoFactorAuthentication";
 
-        public static string IndexNavClass(ViewContext viewContext) => PageNavClass(viewContext, Index);
+        public static string MyAccount => "My Account";
+
+        public static string MyAccountNavClass(ViewContext viewContext) => PageNavClass(viewContext, MyAccount);
+
+        public static string ProfileNavClass(ViewContext viewContext) => PageNavClass(viewContext, Profile);
 
         public static string ChangePasswordNavClass(ViewContext viewContext) => PageNavClass(viewContext, ChangePassword);
 

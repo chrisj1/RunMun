@@ -67,9 +67,31 @@ namespace RunMun.Controllers
             return View(model);
         }
 
+        public async Task<IActionResult> Profile()
+        {
+            var user = await _userManager.GetUserAsync(User);
+            if (user == null)
+            {
+                throw new ApplicationException($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
+            }
+
+            var model = new IndexViewModel
+            {
+                Username = user.UserName,
+                Email = user.Email,
+                PhoneNumber = user.PhoneNumber,
+                IsEmailConfirmed = user.EmailConfirmed,
+                StatusMessage = StatusMessage,
+                Firstname = user.Firstname,
+                Lastname = user.Lastname,
+                School = user.School
+            };
+            return View(model);
+        }
+
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Index(IndexViewModel model)
+        public async Task<IActionResult> Profile(IndexViewModel model)
         {
             if (!ModelState.IsValid)
             {
@@ -102,8 +124,44 @@ namespace RunMun.Controllers
                 }
             }
 
+            var firstname = user.Firstname;
+            if (model.Firstname != firstname)
+            {
+                user.Firstname = model.Firstname;
+                var result = await _userManager.UpdateAsync(user);
+                if(!result.Succeeded)
+                {
+                    throw new ApplicationException($"Unexpected error occurred setting firstname for user with ID '{user.Id}'.");
+                }
+
+            }
+
+            var lastname = user.Lastname;
+            if (model.Lastname != lastname)
+            {
+                user.Lastname = model.Lastname;
+                var result = await _userManager.UpdateAsync(user);
+                if (!result.Succeeded)
+                {
+                    throw new ApplicationException($"Unexpected error occurred setting lastname for user with ID '{user.Id}'.");
+                }
+
+            }
+
+            var school = user.School;
+            if (model.School != school)
+            {
+                user.School = model.School;
+                var result = await _userManager.UpdateAsync(user);
+                if (!result.Succeeded)
+                {
+                    throw new ApplicationException($"Unexpected error occurred setting school for user with ID '{user.Id}'.");
+                }
+
+            }
+
             StatusMessage = "Your profile has been updated";
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction(nameof(Profile));
         }
 
         [HttpPost]
