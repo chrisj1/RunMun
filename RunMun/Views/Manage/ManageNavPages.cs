@@ -21,9 +21,13 @@ namespace RunMun.Views.Manage
 
         public static string TwoFactorAuthentication => "TwoFactorAuthentication";
 
-        public static string MyAccount => "My Account";
+        public static string Users => "Users";
 
-        public static string MyAccountNavClass(ViewContext viewContext) => PageNavClass(viewContext, MyAccount);
+        public static string Committees => "Committees";
+
+        public static string UsersNavClass(ViewContext viewContext) => PageNavClass(viewContext, Users);
+
+        public static string CommitteesNavClass(ViewContext viewContext) => PageNavClass(viewContext, Committees);
 
         public static string ProfileNavClass(ViewContext viewContext) => PageNavClass(viewContext, Profile);
 

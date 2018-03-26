@@ -43,6 +43,128 @@ namespace RunMun.Controllers
             _urlEncoder = urlEncoder;
         }
 
+        [HttpGet]
+        [Authorize(Roles = "Secretariat,Administrator")]
+        public IActionResult Committees()
+        {
+            var items = new List<ManageCommitteeViewModel>();
+            return View(items);
+        }
+
+        [HttpGet]
+        [Authorize(Roles = "Secretariat,Administrator")]
+        public async Task<IActionResult> DetailsUser(string id)
+        {
+            var user = await _userManager.FindByIdAsync(id);
+            var model = new UsersViewModel
+            {
+                Email = user.Email,
+                Firstname = user.Email,
+                Lastname = user.Lastname,
+                Id = user.Id,
+                PhoneNumber = user.PhoneNumber,
+                School = user.School,
+                Username = user.UserName
+            };
+            if (await _userManager.IsInRoleAsync(user, "Secretariat"))
+            {
+                model.Role = Roles.Secretariat;
+            }
+            if (await _userManager.IsInRoleAsync(user, "Delegation"))
+            {
+                model.Role = Roles.Delegation;
+            }
+            return View(model);
+        }
+
+        [HttpGet]
+        [Authorize(Roles = "Secretariat,Administrator")]
+        public async Task<IActionResult> EditUser(string id)
+        {
+            var model = new UsersViewModel();
+            model.Id = id;
+            var user = await _userManager.FindByIdAsync(model.Id);
+            model.Firstname = user.Firstname;
+            model.Lastname = user.Lastname;
+            model.PhoneNumber = user.PhoneNumber;
+            if(await _userManager.IsInRoleAsync(user, "Delegation"))
+            {
+                model.Role = Roles.Delegation;
+            }
+            else if(await _userManager.IsInRoleAsync(user, "Secretariat"))
+            {
+                model.Role = Roles.Secretariat;
+            }
+            model.Username = user.UserName;
+            model.Email = user.Email;
+            model.School = user.School;
+
+            return View(model);
+        }
+
+
+        [HttpPost]
+        [Authorize(Roles = "Secretariat,Administrator")]
+        public async Task<IActionResult> EditUser(UsersViewModel model)
+        {
+            var user = await _userManager.FindByIdAsync(model.Id);
+            user.Email = model.Email;
+            user.Lastname = model.Lastname;
+            user.Email = model.Email;
+            user.Firstname = model.Firstname;
+            user.School = model.School;
+            user.UserName = model.Username;
+            await _userManager.UpdateAsync(user);
+            await _userManager.RemoveFromRoleAsync(user, "Delegation");
+            await _userManager.RemoveFromRoleAsync(user,"Secretariat");
+            if (model.Role == Roles.Delegation)
+            {
+                await _userManager.AddToRoleAsync(user, "Delegation");
+            }
+            if (model.Role == Roles.Secretariat)
+            {
+                await _userManager.AddToRoleAsync(user, "Secretariat");
+            }
+            return View(model);
+        }
+
+        [Authorize(Roles = "Secretariat,Administrator")]
+        public async Task<IActionResult> Users()
+        {
+            var users = new List<UsersViewModel>();
+            foreach(var item in await _userManager.GetUsersInRoleAsync("Secretariat"))
+            {
+                var user = new UsersViewModel {
+                    Firstname = item.Firstname,
+                    Lastname = item.Lastname,
+                    School = item.School,
+                    Email = item.Email,
+                    Role = Roles.Secretariat,
+                    PhoneNumber = item.PhoneNumber,
+                    Username = item.UserName,
+                    Id = item.Id
+                };
+                users.Add(user);
+            }
+
+            foreach (var item in await _userManager.GetUsersInRoleAsync("Delegation"))
+            {
+                var user = new UsersViewModel
+                {
+                    Firstname = item.Firstname,
+                    Lastname = item.Lastname,
+                    School = item.School,
+                    Email = item.Email,
+                    Role = Roles.Delegation,
+                    PhoneNumber = item.PhoneNumber,
+                    Username = item.UserName,
+                    Id = item.Id
+                };
+                users.Add(user);
+            }
+            return View(users);
+        }
+
         [TempData]
         public string StatusMessage { get; set; }
 

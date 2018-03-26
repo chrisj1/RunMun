@@ -232,6 +232,9 @@ namespace RunMun.Controllers
 
                     await _signInManager.SignInAsync(user, isPersistent: false);
                     _logger.LogInformation("User created a new account with password.");
+
+                    _userManager.AddToRoleAsync(user, "Delegation").Wait();
+
                     return RedirectToLocal(returnUrl);
                 }
                 AddErrors(result);

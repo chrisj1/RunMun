@@ -5,7 +5,18 @@
 }
 
 <ul class="nav nav-pills nav-stacked">
-    <li class="@ManageNavPages.MyAccountNavClass(ViewContext)">My Account</li>
+    @{
+        var admin = User.IsInRole("Administrator");
+        var secretariat = User.IsInRole("Secretariat");
+        if (admin || secretariat)
+        {
+            <li>Secretariat</li>
+            <li class="@ManageNavPages.CommitteesNavClass(ViewContext)"><a asp-action="Committees">Committees</a></li>
+            <li >Administration</li>
+            <li class="@ManageNavPages.UsersNavClass(ViewContext)"><a asp-action="Users">Users</a></li>
+        }
+    }
+    <li>My Account</li>
     <li class="@ManageNavPages.ProfileNavClass(ViewContext)"><a asp-action="Profile">Profile</a></li>
     <li class="@ManageNavPages.ChangePasswordNavClass(ViewContext)"><a asp-action="ChangePassword">Password</a></li>
     @if (hasExternalLogins)

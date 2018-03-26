@@ -24,7 +24,7 @@ public class IdentityDataInitializer
         if (userManager.FindByNameAsync("Root").Result == null)
         {
             ApplicationUser user = new ApplicationUser();
-            user.UserName = "Root";
+            user.UserName = "cjerrett18@stjohnsprep.org";
             user.Firstname = "Chris";
             user.Lastname = "Jerrett";
             user.School = null;
@@ -61,6 +61,13 @@ public class IdentityDataInitializer
         {
             IdentityRole role = new IdentityRole();
             role.Name = "Delegation";
+            IdentityResult roleResult = roleManager.
+            CreateAsync(role).Result;
+        }
+        if (!roleManager.RoleExistsAsync("Chair").Result)
+        {
+            IdentityRole role = new IdentityRole();
+            role.Name = "Chair";
             IdentityResult roleResult = roleManager.
             CreateAsync(role).Result;
         }

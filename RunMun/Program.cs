@@ -15,7 +15,6 @@ namespace RunMun
         public static void Main(string[] args)
         {
             ConfrenceConfiguration.LoadConfiguration();
-
             BuildWebHost(args).Run();
         }
 

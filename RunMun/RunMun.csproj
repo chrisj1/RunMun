@@ -5,11 +5,25 @@
     <UserSecretsId>aspnet-RunMun-8627CB78-3275-438C-9C6D-EF9B9D2DCE23</UserSecretsId>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Compile Remove="ConfrenceContext.cs" />
+    <Compile Remove="Data\DataDBContext.cs" />
+  </ItemGroup>
 
   <ItemGroup>
+    <Content Remove="Views\Manage\View.cshtml" />
+  </ItemGroup>
+
+
+  <ItemGroup>
+    <PackageReference Include="EntityFramework" Version="6.2.0" />
+    <PackageReference Include="EntityFramework.Toolkit" Version="1.0.6-pre6" />
     <PackageReference Include="Microsoft.AspNetCore.All" Version="2.0.5" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="2.0.1" PrivateAssets="All" />
-    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.0.2" PrivateAssets="All" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="2.1.0-preview1-final" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="2.1.0-preview1-final" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="2.1.0-preview1-final" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="2.1.0-preview1-final" PrivateAssets="All" />
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.0.3" PrivateAssets="All" />
   </ItemGroup>
 
   <ItemGroup>

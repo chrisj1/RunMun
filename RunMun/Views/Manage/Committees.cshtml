@@ -1,0 +1,54 @@
+﻿@model IEnumerable<RunMun.Models.ManageViewModels.ManageCommitteeViewModel>
+
+@{
+    ViewData["Title"] = "Committees";
+    Layout = "~/Views/Manage/_Layout.cshtml";
+}
+
+<h2>Committees</h2>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.Id)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Name)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.Positions)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.BaseCommittee)
+                </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Id)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Name)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Positions)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.BaseCommittee)
+            </td>
+            <td>
+                @Html.ActionLink("Edit", "EditCommittee", new { id=item.Id }) |
+                @Html.ActionLink("Details", "DetailsCommmittee", new { id = item.Id }) |
+                @Html.ActionLink("Delete", "DeleteCommittee", new { id = item.Id })
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

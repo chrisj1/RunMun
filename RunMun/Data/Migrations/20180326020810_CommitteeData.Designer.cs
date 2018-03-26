@@ -6,13 +6,14 @@ using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.EntityFrameworkCore.Storage.Internal;
 using RunMun.Data;
+using RunMun.Models;
 using System;
 
 namespace RunMun.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20180324230941_updateUserModel")]
-    partial class updateUserModel
+    [Migration("20180326020810_CommitteeData")]
+    partial class CommitteeData
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -186,6 +187,84 @@ namespace RunMun.Data.Migrations
                     b.ToTable("AspNetUsers");
                 });
 
+            modelBuilder.Entity("RunMun.Models.Chair", b =>
+                {
+                    b.Property<string>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("CommitteeId");
+
+                    b.Property<int>("Type");
+
+                    b.Property<string>("UserId");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CommitteeId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Chairs");
+                });
+
+            modelBuilder.Entity("RunMun.Models.Committee", b =>
+                {
+                    b.Property<string>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("BaseCommitteeId");
+
+                    b.Property<bool>("Cloned");
+
+                    b.Property<string>("Description")
+                        .IsRequired();
+
+                    b.Property<string>("Image");
+
+                    b.Property<string>("Name")
+                        .IsRequired();
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("BaseCommitteeId");
+
+                    b.ToTable("Committees");
+                });
+
+            modelBuilder.Entity("RunMun.Models.Document", b =>
+                {
+                    b.Property<string>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("CommitteeId");
+
+                    b.Property<string>("Description");
+
+                    b.Property<string>("Name");
+
+                    b.Property<string>("URL");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CommitteeId");
+
+                    b.ToTable("Documents");
+                });
+
+            modelBuilder.Entity("RunMun.Models.Position", b =>
+                {
+                    b.Property<string>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("CommitteeId");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CommitteeId");
+
+                    b.ToTable("Positions");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityRole")
@@ -229,6 +308,38 @@ namespace RunMun.Data.Migrations
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("RunMun.Models.Chair", b =>
+                {
+                    b.HasOne("RunMun.Models.Committee")
+                        .WithMany("Chairs")
+                        .HasForeignKey("CommitteeId");
+
+                    b.HasOne("RunMun.Models.ApplicationUser", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId");
+                });
+
+            modelBuilder.Entity("RunMun.Models.Committee", b =>
+                {
+                    b.HasOne("RunMun.Models.Committee", "BaseCommittee")
+                        .WithMany()
+                        .HasForeignKey("BaseCommitteeId");
+                });
+
+            modelBuilder.Entity("RunMun.Models.Document", b =>
+                {
+                    b.HasOne("RunMun.Models.Committee")
+                        .WithMany("PaperURL")
+                        .HasForeignKey("CommitteeId");
+                });
+
+            modelBuilder.Entity("RunMun.Models.Position", b =>
+                {
+                    b.HasOne("RunMun.Models.Committee")
+                        .WithMany("Positions")
+                        .HasForeignKey("CommitteeId");
                 });
 #pragma warning restore 612, 618
         }
